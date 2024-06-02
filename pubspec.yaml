@@ -1,0 +1,8 @@
+name: spdx_license_fetcher
+description: Dart package to fetch spdx licenses
+version: 0.1.0
+environment:
+  sdk: ^3.4.1
+dependencies:
+dev_dependencies:
+  test: ^1.25.5

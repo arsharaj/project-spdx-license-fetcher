@@ -6,8 +6,11 @@
 
 ```
 root
-├── code
+├── bin
 ├── docs
+├── lib
+|   └── src
+└── test
 ```
 
 ### License
