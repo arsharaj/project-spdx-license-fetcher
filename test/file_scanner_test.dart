@@ -33,10 +33,8 @@ void main() {
         '${testDir.path}\\subdir\\LICENSE',
         '${testDir.path}\\subdir\\COPYING'
       ];
-
       // act
       final files = await fileScanner.scanDirectory(testDir.path);
-
       // assert
       expect(files.map((file) => file.path).toList(), unorderedEquals(expectedFiles));
     });
