@@ -5,26 +5,26 @@ import 'package:spdx_license_fetcher/src/file_scanner.dart';
 import 'package:test/test.dart';
 
 void main() {
+  late Directory testDir;
+  late FileScanner fileScanner;
+
+  setUp(() async {
+    testDir = await Directory.systemTemp.createTemp("license_test_dir");
+    fileScanner = FileScanner();
+
+    // create test files
+    await File('${testDir.path}/license').writeAsString('MIT License');
+    await File('${testDir.path}/license.txt').writeAsString('Apache License');
+    await File('${testDir.path}/readme').writeAsString('This is a readme file.');
+    await File('${testDir.path}/subdir/LICENSE').create(recursive: true);
+    await File('${testDir.path}/subdir/COPYING').writeAsString('GPL License');
+  });
+
+  tearDown(() {
+    testDir.delete(recursive: true);
+  });
+
   group('scan my project directory for license files', () {
-    late Directory testDir;
-    late FileScanner fileScanner;
-
-    setUp(() async {
-      testDir = await Directory.systemTemp.createTemp("license_test_dir");
-      fileScanner = FileScanner();
-
-      // create test files
-      await File('${testDir.path}/license').writeAsString('MIT License');
-      await File('${testDir.path}/license.txt').writeAsString('Apache License');
-      await File('${testDir.path}/readme').writeAsString('This is a readme file.');
-      await File('${testDir.path}/subdir/LICENSE').create(recursive: true);
-      await File('${testDir.path}/subdir/COPYING').writeAsString('GPL License');
-    });
-
-    tearDown(() {
-      testDir.delete(recursive: true);
-    });
-
     test('should scan the directory, subdirectory and find license files', () async {
       // arrange
       final expectedFiles = [
