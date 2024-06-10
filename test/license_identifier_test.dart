@@ -83,19 +83,36 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ''';
 
+const String _bsdLicenseText = '''
+Copyright (C) YEAR by AUTHOR EMAIL
+
+Permission to use, copy, modify, and/or distribute this software for 
+any purpose with or without fee is hereby granted.
+
+THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL 
+WARRANTIES WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED 
+WARRANTIES OF MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE 
+AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL 
+DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR 
+PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS 
+ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE 
+OF THIS SOFTWARE.
+''';
+
 void main() {
   late Directory tempDir;
-  late LicenseIdentifier licenseIdentifier;
+  late TextFileLicenseIdentifier licenseIdentifier;
 
   setUp(() async {
     tempDir = await Directory.systemTemp.createTemp('license_identifier_test');
-    licenseIdentifier = LicenseIdentifier();
+    licenseIdentifier = await TextFileLicenseIdentifier.create();
 
     // create temp license files
     await File('${tempDir.path}/mit.txt').writeAsString(_mitLicenseText);
     await File('${tempDir.path}/modified_mit.txt').writeAsString(_modifiedMitLicenseText);
     await File('${tempDir.path}/highly_modified_mit.txt').writeAsString(_highlyModifiedMitLicenseText);
     await File('${tempDir.path}/apache.txt').writeAsString(_apacheLicenseText);
+    await File('${tempDir.path}/bsd.txt').writeAsString(_bsdLicenseText);
     await File('${tempDir.path}/unknown.txt').writeAsString('Unknown');
   });
 
@@ -103,33 +120,47 @@ void main() {
     await tempDir.delete(recursive: true);
   });
 
+  List<String> extractKeysFromListOfMaps(List<Map<String, String>> listOfMaps) {
+    return listOfMaps.expand((map) => map.keys).toList();
+  }
+
   group('read the contents of identified license files', () {
     test('should return the spdx license of a single license file', () async {
       final actualSpdxId = await licenseIdentifier.identifySingleLicense('${tempDir.path}/mit.txt');
-      expect(actualSpdxId, equals('MIT'));
+      expect(actualSpdxId.keys.single, equals('MIT'));
     });
 
     test('should return the spdx license of a modified single license file', () async {
       final actualSpdxId = await licenseIdentifier.identifySingleLicense('${tempDir.path}/modified_mit.txt');
-      expect(actualSpdxId, equals('MIT'));
+      expect(actualSpdxId.keys.single, equals('MIT'));
     });
 
     test('should not return the spdx license of a highly modified single license file', () async {
       final actualSpdxId = await licenseIdentifier.identifySingleLicense('${tempDir.path}/highly_modified_mit.txt');
-      expect(actualSpdxId, equals('Unknown'));
+      expect(actualSpdxId.keys.single, equals('Unknown'));
     });
 
     test('should return unknown for unknown licenses', () async {
       final actualSpdxId = await licenseIdentifier.identifySingleLicense('${tempDir.path}/unknown.txt');
-      expect(actualSpdxId, equals('Unknown'));
+      expect(actualSpdxId.keys.single, equals('Unknown'));
     });
 
-    test('should return list of spdx licenses of multiple license files', () async {
+    test('should return list of spdx licenses correct and unknown for incorrect text', () async {
       final actualSpdxIdsList = await licenseIdentifier.identifyMultipleLicenses([
         '${tempDir.path}/mit.txt',
         '${tempDir.path}/apache.txt'
       ]);
-      expect(actualSpdxIdsList, ['MIT', 'Apache-2.0']);
+      expect(actualSpdxIdsList.length, 2);
+      expect(extractKeysFromListOfMaps(actualSpdxIdsList), ['MIT', 'Unknown']);
+    });
+
+    test('should return list of spdx licenses for multiple licenses', () async {
+      final actualSpdxIdsList = await licenseIdentifier.identifyMultipleLicenses([
+        '${tempDir.path}/mit.txt',
+        '${tempDir.path}/bsd.txt'
+      ]);
+      expect(actualSpdxIdsList.length, 2);
+      expect(extractKeysFromListOfMaps(actualSpdxIdsList), ['MIT', '0BSD']);
     });
   });
 }
