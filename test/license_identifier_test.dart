@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:spdx_license_fetcher/src/license_identification_service.dart';
 import 'package:spdx_license_fetcher/src/license_identifier.dart';
 import 'package:test/test.dart';
 
@@ -101,11 +102,13 @@ OF THIS SOFTWARE.
 
 void main() {
   late Directory tempDir;
+  late LicenseIdentificationService licenseIdentificationService;
   late TextFileLicenseIdentifier licenseIdentifier;
 
   setUp(() async {
     tempDir = await Directory.systemTemp.createTemp('license_identifier_test');
-    licenseIdentifier = await TextFileLicenseIdentifier.create();
+    licenseIdentificationService = await LicenseIdentificationServiceImpl.create('licenses', 0.9);
+    licenseIdentifier = TextFileLicenseIdentifier(licenseIdentificationService);
 
     // create temp license files
     await File('${tempDir.path}/mit.txt').writeAsString(_mitLicenseText);
