@@ -4,7 +4,7 @@ import 'package:spdx_license_fetcher/src/exceptions.dart';
 import 'package:string_similarity/string_similarity.dart';
 
 abstract class LicenseIdentificationService {
-  Map<String, String> identifyLicense(String licenseContent);
+  String identifyLicense(String licenseContent);
 }
 
 class LicenseIdentificationServiceImpl implements LicenseIdentificationService {
@@ -43,9 +43,8 @@ class LicenseIdentificationServiceImpl implements LicenseIdentificationService {
   }
 
   @override
-  Map<String, String> identifyLicense(String licenseContent) {
-    String bestMatchKey = 'Unknown';
-    String bestMatchValue = '';
+  String identifyLicense(String licenseContent) {
+    String bestMatch = 'Unknown';
     double bestScore = 0.0;
 
     final normalizedLicenseFileContent = licenseContent.replaceAll(RegExp(r'\s+'), '');
@@ -54,11 +53,10 @@ class LicenseIdentificationServiceImpl implements LicenseIdentificationService {
       final normalizedSpdxLicenseText = identifier.value.replaceAll(RegExp(r'\s+'), '');
       final score = normalizedLicenseFileContent.similarityTo(normalizedSpdxLicenseText);
       if (score > bestScore && score >= _threshold) {
-        bestMatchKey = identifier.key;
-        bestMatchValue = identifier.value;
+        bestMatch = identifier.key;
         bestScore = score;
       }
     }
-    return {bestMatchKey : bestMatchValue};
+    return bestMatch;
   }
 }

@@ -122,26 +122,26 @@ void main() {
   tearDown(() {});
 
   group('identify the type of license from the license text', () {
-    test('do nothing', () {});
+    test('should do nothing', () {});
 
     test('should return the correct license for MIT', () {
-      final result = licenseIdentificationService.identifyLicense(_mitLicenseText);
-      expect(result.keys, contains('MIT'));
+      expect(licenseIdentificationService.identifyLicense(_mitLicenseText), 'MIT');
     });
 
     test('should return the correct license for Apache-2.0', () {
-      final result = licenseIdentificationService.identifyLicense(_apacheLicenseText);
-      expect(result.keys, contains('Apache-2'));
+      expect(licenseIdentificationService.identifyLicense(_apacheLicenseText), 'Apache-2');
     });
 
     test('should return unknown for non-matching license', () {
-      final result = licenseIdentificationService.identifyLicense('This is an unknown text.');
-      expect(result.keys, contains('Unknown'));
+      expect(licenseIdentificationService.identifyLicense('This is an unknown text.'), 'Unknown');
+    });
+
+    test('should return the correct license for modified MIT', () {
+      expect(licenseIdentificationService.identifyLicense(_modifiedMitLicenseText), 'MIT');
     });
 
     test('should return Unknown for text below similarity threshold', () {
-      final result = licenseIdentificationService.identifyLicense(_highlyModifiedMitLicenseText);
-      expect(result, contains('Unknown'));
+      expect(licenseIdentificationService.identifyLicense(_highlyModifiedMitLicenseText), 'Unknown');
     });
   });
 }
