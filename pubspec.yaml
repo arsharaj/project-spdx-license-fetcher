@@ -1,5 +1,5 @@
 name: spdx_license_fetcher
-description: Dart package to scan my project directory for license files and read the content of identified license files
+description: Dart package to manage license files
 version: 0.1.0
 environment:
   sdk: ^3.4.1
