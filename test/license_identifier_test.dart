@@ -123,29 +123,25 @@ void main() {
     await tempDir.delete(recursive: true);
   });
 
-  List<String> extractKeysFromListOfMaps(List<Map<String, String>> listOfMaps) {
-    return listOfMaps.expand((map) => map.keys).toList();
-  }
-
   group('read the contents of identified license files', () {
     test('should return the spdx license of a single license file', () async {
       final actualSpdxId = await licenseIdentifier.identifySingleLicense('${tempDir.path}/mit.txt');
-      expect(actualSpdxId.keys.single, equals('MIT'));
+      expect(actualSpdxId, equals({'MIT' : 'mit.txt'}));
     });
 
     test('should return the spdx license of a modified single license file', () async {
       final actualSpdxId = await licenseIdentifier.identifySingleLicense('${tempDir.path}/modified_mit.txt');
-      expect(actualSpdxId.keys.single, equals('MIT'));
+      expect(actualSpdxId, equals({'MIT' : 'modified_mit.txt'}));
     });
 
     test('should not return the spdx license of a highly modified single license file', () async {
       final actualSpdxId = await licenseIdentifier.identifySingleLicense('${tempDir.path}/highly_modified_mit.txt');
-      expect(actualSpdxId.keys.single, equals('Unknown'));
+      expect(actualSpdxId, equals({'Unknown' : 'highly_modified_mit.txt'}));
     });
 
     test('should return unknown for unknown licenses', () async {
       final actualSpdxId = await licenseIdentifier.identifySingleLicense('${tempDir.path}/unknown.txt');
-      expect(actualSpdxId.keys.single, equals('Unknown'));
+      expect(actualSpdxId, equals({'Unknown' : 'unknown.txt'}));
     });
 
     test('should return list of spdx licenses correct and unknown for incorrect text', () async {
@@ -154,16 +150,17 @@ void main() {
         '${tempDir.path}/apache.txt'
       ]);
       expect(actualSpdxIdsList.length, 2);
-      expect(extractKeysFromListOfMaps(actualSpdxIdsList), ['MIT', 'Unknown']);
+      expect(actualSpdxIdsList, equals({'MIT' : ['mit.txt'], 'Unknown' : ['apache.txt']}));
     });
 
     test('should return list of spdx licenses for multiple licenses', () async {
       final actualSpdxIdsList = await licenseIdentifier.identifyMultipleLicenses([
         '${tempDir.path}/mit.txt',
+        '${tempDir.path}/modified_mit.txt',        
         '${tempDir.path}/bsd.txt'
       ]);
       expect(actualSpdxIdsList.length, 2);
-      expect(extractKeysFromListOfMaps(actualSpdxIdsList), ['MIT', '0BSD']);
+      expect(actualSpdxIdsList, equals({'MIT' : ['mit.txt', 'modified_mit.txt'], '0BSD' : ['bsd.txt']}));
     });
   });
 }
