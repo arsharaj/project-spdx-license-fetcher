@@ -3,7 +3,7 @@ import 'dart:io';
 
 class ReportGenerator {
   String generateTextReport(Map<String, List<String>> identifiedLicenses) {
-    final StringBuffer buffer = StringBuffer();
+    final buffer = StringBuffer();
 
     buffer.writeln('## License Declarations');
     buffer.writeln();
@@ -26,7 +26,7 @@ class ReportGenerator {
   }
 
   Future<void> generateFileReport(Map<String, List<String>> identifiedLicenses, String outputFilePath) async {
-    final File fileReport = File(outputFilePath);
+    final fileReport = File(outputFilePath);
     await fileReport.writeAsString(generateTextReport(identifiedLicenses));
   }
 }

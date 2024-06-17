@@ -6,7 +6,7 @@ class FileScanner {
   Future<List<File>> scanDirectory(String path) async {
     final directory = Directory(path);
     if (!await directory.exists()) {
-      String message = 'The directory at path ${path} does not exist.';
+      var message = 'The directory at path ${path} does not exist.';
       throw DirectoryNotFoundException(message);
     }
 

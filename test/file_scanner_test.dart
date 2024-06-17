@@ -9,7 +9,7 @@ void main() {
   late FileScanner fileScanner;
 
   setUp(() async {
-    testDir = await Directory.systemTemp.createTemp("license_test_dir");
+    testDir = await Directory.systemTemp.createTemp('license_test_dir');
     fileScanner = FileScanner();
 
     // create test files

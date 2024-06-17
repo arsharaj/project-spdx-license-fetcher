@@ -8,8 +8,8 @@ class TextFileLicenseIdentifier {
   TextFileLicenseIdentifier(this.licenseIdentificationService);
 
   Future<Map<String, String>> identifySingleLicense(String licenseFilePath) async {
-    String licenseFileContent = await File(licenseFilePath).readAsString();
-    String licenseType = licenseIdentificationService.identifyLicense(licenseFileContent);
+    var licenseFileContent = await File(licenseFilePath).readAsString();
+    var licenseType = licenseIdentificationService.identifyLicense(licenseFileContent);
     return {licenseType: licenseFilePath};
   }
 
@@ -17,9 +17,9 @@ class TextFileLicenseIdentifier {
     final licenseIdentifierMap = Map<String, List<String>>();
 
     for (var licenseFilePath in licenseFilePaths) {
-      Map<String, String> identifier = await identifySingleLicense(licenseFilePath);
-      String licenseType = identifier.keys.first;
-      String filePath = identifier.values.first;
+      var identifier = await identifySingleLicense(licenseFilePath);
+      var licenseType = identifier.keys.first;
+      var filePath = identifier.values.first;
       licenseIdentifierMap.putIfAbsent(licenseType, () => []).add(filePath);
     }
     

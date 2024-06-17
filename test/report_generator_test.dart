@@ -44,7 +44,7 @@ void main() {
     });
 
     test('should generate file report', () async {
-      final String outputFileReportPath = 'test' + Platform.pathSeparator + 'sbom.txt';
+      final outputFileReportPath = 'test' + Platform.pathSeparator + 'sbom.txt';
       await reportGenerator.generateFileReport(identifiedLicenses, outputFileReportPath);
 
       final fileReport = File(outputFileReportPath);

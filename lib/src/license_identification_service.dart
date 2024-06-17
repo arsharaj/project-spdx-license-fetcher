@@ -8,7 +8,7 @@ abstract class LicenseIdentificationService {
 }
 
 class LicenseIdentificationServiceImpl implements LicenseIdentificationService {
-  Map<String, String> _spdxLicenses = {};
+  final Map<String, String> _spdxLicenses = {};
   late double _threshold;
   late String _licensesDirectoryPath;
 
@@ -26,7 +26,7 @@ class LicenseIdentificationServiceImpl implements LicenseIdentificationService {
   Future<void> _loadSpdxLicenses() async {
     final directory = Directory(_licensesDirectoryPath);
     if (!await directory.exists()) {
-      String message = 'The directory at path ${_licensesDirectoryPath} does not exist.';
+      var message = 'The directory at path ${_licensesDirectoryPath} does not exist.';
       throw DirectoryNotFoundException(message);
     }
 
@@ -44,8 +44,8 @@ class LicenseIdentificationServiceImpl implements LicenseIdentificationService {
 
   @override
   String identifyLicense(String licenseContent) {
-    String bestMatch = 'Unknown';
-    double bestScore = 0.0;
+    var bestMatch = 'Unknown';
+    var bestScore = 0.0;
 
     final normalizedLicenseFileContent = licenseContent.replaceAll(RegExp(r'\s+'), '');
 
