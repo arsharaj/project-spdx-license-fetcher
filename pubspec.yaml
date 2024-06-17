@@ -1,6 +1,7 @@
 name: spdx_license_fetcher
 description: Dart package to manage license files
 version: 0.1.0
+homepage: https://github.com/arsharaj/project-spdx-license-fetcher
 environment:
   sdk: ^3.4.1
 dependencies:
