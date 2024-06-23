@@ -1,6 +1,6 @@
 ## File Scanner
 
-> This module is designed to scan a given directory and identify license files.
+> This module is designed to scan a given directory for license files
 
 ### Features
 
