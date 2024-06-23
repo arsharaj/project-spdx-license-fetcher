@@ -26,30 +26,23 @@ void main() {
 
   group('scan my project directory for license files', () {
     test('should scan the directory, subdirectory and find license files when directory path is given', () async {
-      // arrange
       final expectedFiles = [
         '${testDir.path}\\license',
         '${testDir.path}\\license.txt',
         '${testDir.path}\\subdir\\LICENSE',
         '${testDir.path}\\subdir\\COPYING'
       ];
-      // act
       final files = await fileScanner.scanDirectory(testDir.path);
-      // assert
       expect(files.map((file) => file.path).toList(), unorderedEquals(expectedFiles));
     });
 
     test('should not find non-license files when directory path is given', () async {
-      // arrange
       final files = await fileScanner.scanDirectory(testDir.path);
-      // act
       final nonLicensedFiles = files.where((file) => !file.path.contains(RegExp(r'license|copying')));
-      // assert
       expect(nonLicensedFiles, isEmpty);
     });
 
     test('should throw DirectoryNotFoundException when non-existent directory given', () async {
-      // assert
       expect(() async => await fileScanner.scanDirectory(''), throwsA(isA<DirectoryNotFoundException>()));
     });
   });
