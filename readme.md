@@ -13,12 +13,12 @@
 
 ```
 root
-├── bin
-├── docs
-├── lib
-│   └── src
-├── licenses
-└── test
+├─── bin
+├─── docs
+├─── lib
+│    └─── src
+├─── licenses
+└─── test
 ```
 
 ### License
