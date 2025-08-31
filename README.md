@@ -13,7 +13,6 @@
 
 ```
 root
-├─── bin
 ├─── docs
 ├─── lib
 │    └─── src
@@ -21,6 +20,22 @@ root
 └─── test
 ```
 
+### Documentation
+
+Full documentation can be found in [docs](docs/) folder.
+
+### Running Tests
+
+Run the following command to execute the test suite : `dart test ./test/`
+
+### Contributing
+
+We welcome contributions! Please read [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+
+### Versioning
+
+This project uses [Semantic Versioning](https://semver.org/).
+
 ### License
 
-MIT License
+[MIT License](LICENSE)
