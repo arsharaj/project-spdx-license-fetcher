@@ -1,8 +1,13 @@
+# hidden directories
 .dart_tool/
 .pub/
 .packages/
 .vscode/
 
+# directories
 build/
 
+# hidden files
+
+# files
 pubspec.lock
