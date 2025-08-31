@@ -1,0 +1,44 @@
+name : Continuous Integration
+
+on :
+  push :
+    branches :
+      - main
+
+  pull_request :
+    branches :
+      - main
+
+jobs :
+  build :
+    runs-on : ubuntu-latest
+
+    steps :
+      - name : Checkout code
+        uses : actions/checkout@v4
+
+      - name : Set up environment
+        run  : |
+          echo "start : setting up environment"
+          echo "end : setting up environment"
+
+      - name : Install dependencies
+        run  : |
+          echo "start : installing dependencies"
+          echo "end : installing dependencies"
+
+      - name : Run tests
+        run  : |
+          echo "start : running tests"
+          echo "end : running tests"
+
+      - name : Build project
+        run  : |
+          echo "start : building project"
+          echo "end : building project"
+
+      - name : Deploy
+        if   : github.ref == 'refs/heads/main'
+        run  : |
+          echo "start : deploying project"
+          echo "end : deploying project"
